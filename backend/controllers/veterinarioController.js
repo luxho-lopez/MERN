@@ -1,4 +1,5 @@
 import Veterinario from "../models/Veterinario.js";
+import generarJWT from "../helpers/generarJWT.js";
 
 const registrar = async (req, res) => {
     const { nombre, email, password, rol } = req.body;
@@ -71,7 +72,8 @@ const autenticar = async (req, res) => {
 
     // Revisar el password
     if( await usuario.comprobarPassword(password)) {
-        console.log('Contraseña Valida');
+        // Autenticar
+        res.json({ token: generarJWT(usuario.id) });
     } else {
         const error = new Error('La contraseña no es valida.' );
         return res.status(403).json({ msg: error.message });
